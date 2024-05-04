@@ -1,5 +1,6 @@
 int bound_h = 10, line_w = 6;
 boolean[] keysDown;
+boolean menu = true, game_over = false;
 Player player1, player2;
 Ball ball;
 
@@ -28,17 +29,18 @@ void draw() {
   
   // Moving section:
 
-  if (keysDown[79]) // O
-    player1.move("UP");
-  if (keysDown[76]) // L
-    player1.move("DOWN");
-  if (keysDown[87]) // W
-    player2.move("UP");
-  if (keysDown[83]) // S
-    player2.move("DOWN");
-    
-  ball.move();
-  
+  if(!menu) {
+    if (keysDown[79]) // O
+      player1.move("UP");
+    if (keysDown[76]) // L
+      player1.move("DOWN");
+    if (keysDown[87]) // W
+      player2.move("UP");
+    if (keysDown[83]) // S
+      player2.move("DOWN");
+      
+    ball.move();
+  }
   // Checking section:
 
   player1.checkBounds();
@@ -47,22 +49,56 @@ void draw() {
   ball.checkScore();
 
   // Drawing section:
-  
-  fill(255, 0, 0, 200);
-  textSize(30);
-  text("P1: " + player1.score, 20, 50);
-  text("P2: " + player2.score, 20, 80);
-
+ 
   fill(255);
   rect(0, 0, width, bound_h); // Draw top bound
   rect(0, height - bound_h, width, bound_h); // Draw bottom bound
 
-  for (int i = bound_h + 10; i < height - bound_h; i += 60) {
-    rect(width / 2 - line_w / 2, i, line_w, 40); // Draw dashed center line
+  fill(150);
+  if(!menu) {
+    for (int i = bound_h + 10; i < height - bound_h; i += 60) {
+      rect(width / 2 - line_w / 2, i, line_w, 40); // Draw dashed center line
+    }
   }
 
-  ball.draw();
+  fill(255);
+  if(!menu)
+    ball.draw();
   player1.draw();
   player2.draw();
+  
+  if(!menu) {
+    fill(255);
+    textAlign(CENTER , CENTER);
+    textSize(40);
+    text(player1.score, width / 4 * 3, height / 4);
+    text(player2.score, width / 4, height / 4);
+  }
+  
+  if(menu) {
+    fill(255);
+    textAlign(CENTER , CENTER);
+    textSize(40);
+    
+    text("↑  O", width / 6 * 5, height / 4);
+    text("↓  L", width / 6 * 5, height / 4 * 3);
+    text("W  ↑", width / 6, height / 4);
+    text("S  ↓", width / 6, height / 4 * 3);
+
+    textSize(150);
+    text("PONG", width / 2, height / 2);
+    
+    textSize(40);
+    text("Press SPACE to start", width / 2, height / 2 + 100);
+    
+    textSize(20);
+    text("v1.0", width - 40, 40);
+    text("Made by Paweł Sampir - 2024", width / 2, height - 40);
+    
+    if(keyPressed && key == ' '){
+      menu = false;
+    }
+  
+  }
   
 }
