@@ -123,7 +123,7 @@ void draw() {
     text("Press SPACE to start", width / 2, height / 2 + 65);
     
     textSize(20);
-    text("v1.0", width - 40, 40);
+    text("v1.0.0", width - 40, 40);
     text("Made by Paweł Sampir (2024)", width / 2, height - 40);
     
     if(keyPressed && key == ' ') {
