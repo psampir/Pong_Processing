@@ -29,7 +29,7 @@ void draw() {
   
   // Moving section:
 
-  if(!menu) {
+  if(!menu && !game_over) {
     if (keysDown[79]) // O
       player1.move("UP");
     if (keysDown[76]) // L
@@ -41,12 +41,19 @@ void draw() {
       
     ball.move();
   }
+  
+  //if(key == 'x' && !menu)
+    //game_over = true;
+  
   // Checking section:
 
   player1.checkBounds();
   player2.checkBounds();
   ball.checkCollision();
   ball.checkScore();
+  
+  if(player1.score == 11 || player2.score == 11)
+    game_over = true;
 
   // Drawing section:
  
@@ -55,7 +62,7 @@ void draw() {
   rect(0, height - bound_h, width, bound_h); // Draw bottom bound
 
   fill(150);
-  if(!menu) {
+  if(!menu && !game_over) {
     for (int i = bound_h + 10; i < height - bound_h; i += 60) {
       rect(width / 2 - line_w / 2, i, line_w, 40); // Draw dashed center line
     }
@@ -75,9 +82,33 @@ void draw() {
     text(player2.score, width / 4, height / 4);
   }
   
+  if(game_over) {
+    String left_txt = "WINNER", right_txt = "LOSER";
+    
+    if(player1.score > player2.score) {
+      left_txt = "LOSER"; right_txt = "WINNER";
+    }
+    
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(60);
+    text(right_txt, width / 4 * 3, height / 2);
+    text(left_txt, width / 4, height / 2);
+    
+    textSize(40);
+    text("Press SPACE to play again", width / 2, height / 2 + 300);
+    
+    if(keyPressed && key == ' ') {
+      player1.reset("RIGHT");
+      player2.reset("LEFT");
+      ball.reset();
+      game_over = false;
+    }
+  }
+  
   if(menu) {
     fill(255);
-    textAlign(CENTER , CENTER);
+    textAlign(CENTER, CENTER);
     textSize(40);
     
     text("↑  O", width / 6 * 5, height / 4);
@@ -86,16 +117,16 @@ void draw() {
     text("S  ↓", width / 6, height / 4 * 3);
 
     textSize(150);
-    text("PONG", width / 2, height / 2);
+    text("PONG", width / 2, height / 2 - 35);
     
     textSize(40);
-    text("Press SPACE to start", width / 2, height / 2 + 100);
+    text("Press SPACE to start", width / 2, height / 2 + 65);
     
     textSize(20);
     text("v1.0", width - 40, 40);
-    text("Made by Paweł Sampir - 2024", width / 2, height - 40);
+    text("Made by Paweł Sampir (2024)", width / 2, height - 40);
     
-    if(keyPressed && key == ' '){
+    if(keyPressed && key == ' ') {
       menu = false;
     }
   
