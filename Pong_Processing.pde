@@ -1,16 +1,15 @@
-PVector ball;
-int player_w = 20, player_h = 100, ball_size = 20;
-int bound_h = 20;
-Player player1, player2;
+int bound_h = 10, line_w = 6;
 boolean[] keysDown;
+Player player1, player2;
+Ball ball;
 
 void setup() {
   size(1200, 800);
   frameRate(60);
   keysDown = new boolean[256];
-  player1 = new Player(new PVector(width - player_w, height / 2 - player_h / 2));
-  player2 = new Player(new PVector(0, height / 2 - player_h / 2));
-  ball = new PVector(width / 2 - ball_size / 2, height / 2 - ball_size / 2);
+  player1 = new Player("RIGHT");
+  player2 = new Player("LEFT");
+  ball = new Ball();
 }
 
 void keyPressed() {
@@ -26,6 +25,8 @@ void keyReleased() {
 void draw() {
   background(0);
   noStroke();
+  
+  // Moving section:
 
   if (keysDown[79]) // O
     player1.move("UP");
@@ -35,24 +36,33 @@ void draw() {
     player2.move("UP");
   if (keysDown[83]) // S
     player2.move("DOWN");
+    
+  ball.move();
+  
+  // Checking section:
 
   player1.checkBounds();
   player2.checkBounds();
+  ball.checkCollision();
+  ball.checkScore();
 
-  // Drawing section
+  // Drawing section:
+  
+  fill(255, 0, 0, 200);
+  textSize(30);
+  text("P1: " + player1.score, 20, 50);
+  text("P2: " + player2.score, 20, 80);
 
   fill(255);
-  rect(0, 0, width, bound_h); // Draw bounds
-  rect(0, height - bound_h, width, bound_h);
+  rect(0, 0, width, bound_h); // Draw top bound
+  rect(0, height - bound_h, width, bound_h); // Draw bottom bound
 
-  fill(128);
-  for (int i = bound_h; i < height - bound_h; i += 60) {
-    rect(width / 2 - 5, i, 10, 40); // Draw center line
+  for (int i = bound_h + 10; i < height - bound_h; i += 60) {
+    rect(width / 2 - line_w / 2, i, line_w, 40); // Draw dashed center line
   }
 
-  fill(255);
+  ball.draw();
   player1.draw();
   player2.draw();
-
-  rect(ball.x, ball.y, ball_size, ball_size); // Draw ball
+  
 }
