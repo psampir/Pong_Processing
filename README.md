@@ -1,5 +1,7 @@
 # Pong (Processing)
 
+![Screenshot](./screenshot.png)
+
 ## Controls:
 
 - **Player on the left**
